@@ -14,7 +14,7 @@ public class Drive extends OpMode {
     public Hardware robot;
     public Gamepad previousGamepad1, currentGamepad1;
     public Timer rumbling;
-    public int direction;
+    public boolean direction;
 
     @Override
     public void init() {
@@ -33,26 +33,17 @@ public class Drive extends OpMode {
         previousGamepad1.copy(currentGamepad1);
         currentGamepad1.copy(gamepad1);
 
-        if(currentGamepad1.dpad_down && !previousGamepad1.dpad_down) direction++;
+        if(currentGamepad1.dpad_down && !previousGamepad1.dpad_down) direction = !direction;
 
-        switch (direction) {
-            case 0: {
-                robot.colector.setDirection(DcMotorSimple.Direction.FORWARD);
-                gamepad1.setLedColor(0, 1, 0, Gamepad.LED_DURATION_CONTINUOUS);
-                rumbling.resetTimer();
-                break;
-            }
-            case 1: {
-                robot.colector.setDirection(DcMotorSimple.Direction.REVERSE);
-                gamepad1.setLedColor(1, 0, 0, Gamepad.LED_DURATION_CONTINUOUS);
-                if(rumbling.getElapsedTime() <= 250) gamepad1.rumble(Gamepad.RUMBLE_DURATION_CONTINUOUS);
-                else gamepad1.stopRumble();
-                break;
-            }
-            default: {
-                direction = 0;
-                break;
-            }
+        if(direction) {
+            robot.colector.setDirection(DcMotorSimple.Direction.REVERSE);
+            gamepad1.setLedColor(1, 0, 0, Gamepad.LED_DURATION_CONTINUOUS);
+            if(rumbling.getElapsedTime() <= 250) gamepad1.rumble(Gamepad.RUMBLE_DURATION_CONTINUOUS);
+            else gamepad1.stopRumble();
+        } else {
+            robot.colector.setDirection(DcMotorSimple.Direction.FORWARD);
+            gamepad1.setLedColor(0, 1, 0, Gamepad.LED_DURATION_CONTINUOUS);
+            rumbling.resetTimer();
         }
 
         if(gamepad1.cross) robot.colector.setPower(1);
