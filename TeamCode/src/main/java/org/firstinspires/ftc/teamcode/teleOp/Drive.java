@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.util.Hardware;
 public class Drive extends OpMode {
     public Hardware robot;
     public Gamepad previousGamepad1, currentGamepad1;
-    public Timer rumbling;
+    public Timer rumbling, rumbling2;
     public boolean direction;
 
     @Override
@@ -21,6 +21,7 @@ public class Drive extends OpMode {
         robot = new Hardware(hardwareMap);
 
         rumbling = new Timer();
+        rumbling2 = new Timer();
 
         previousGamepad1 = new Gamepad();
         currentGamepad1 = new Gamepad();
@@ -33,29 +34,38 @@ public class Drive extends OpMode {
         previousGamepad1.copy(currentGamepad1);
         currentGamepad1.copy(gamepad1);
 
-        if(currentGamepad1.dpad_down && !previousGamepad1.dpad_down) direction = !direction;
+        if (currentGamepad1.dpad_down && !previousGamepad1.dpad_down) direction = !direction;
 
-        if(direction) {
+        if (direction) {
             robot.colector.setDirection(DcMotorSimple.Direction.REVERSE);
             gamepad1.setLedColor(1, 0, 0, Gamepad.LED_DURATION_CONTINUOUS);
-            if(rumbling.getElapsedTime() <= 250) gamepad1.rumble(Gamepad.RUMBLE_DURATION_CONTINUOUS);
+            if (rumbling.getElapsedTime() <= 250)
+                gamepad1.rumble(Gamepad.RUMBLE_DURATION_CONTINUOUS);
             else gamepad1.stopRumble();
+            rumbling2.resetTimer();
         } else {
             robot.colector.setDirection(DcMotorSimple.Direction.FORWARD);
-            gamepad1.setLedColor(0, 1, 0, Gamepad.LED_DURATION_CONTINUOUS);
+            gamepad1.setLedColor(0, 0, 1, Gamepad.LED_DURATION_CONTINUOUS);
+            if (rumbling2.getElapsedTime() <= 250)
+                gamepad1.rumble(Gamepad.RUMBLE_DURATION_CONTINUOUS);
+            else gamepad1.stopRumble();
             rumbling.resetTimer();
         }
 
-        if(gamepad1.cross) robot.colector.setPower(1);
-        else robot.colector.setPower(0);
+        if (gamepad1.cross) robot.colector.setPower(1);
+        else if (!gamepad1.right_bumper) robot.colector.setPower(0);
 
-        if(gamepad1.circle) for(DcMotorEx motor : robot.shooters) motor.setPower(1);
-        else for(DcMotorEx motor : robot.shooters) motor.setPower(0);
+
+        if (gamepad1.right_bumper) {
+            for (DcMotorEx shooterMotor : robot.shooters) shooterMotor.setPower(1);
+            robot.colector.setPower(.5);
+        }
+        else for (DcMotorEx shooterMotor : robot.shooters) shooterMotor.setPower(0);
     }
 
     public void drive(Gamepad gamepad) {
         double y = gamepad.left_stick_y;
-        double x = gamepad.left_stick_x;
+        double x = +gamepad.left_stick_x;
         double rx = -gamepad.right_stick_x;
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);

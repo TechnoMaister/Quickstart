@@ -26,6 +26,7 @@ public class Hardware {
         leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
         rightShoot.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftShoot.setDirection(DcMotorSimple.Direction.FORWARD);
 
         motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear, colector, leftShoot, rightShoot);
         shooters = Arrays.asList(leftShoot, rightShoot);
