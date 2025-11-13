@@ -18,10 +18,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.firstinspires.ftc.robotcore.external.Func;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.util.Hardware;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 @TeleOp
 public class Drive extends OpMode {
@@ -31,11 +35,13 @@ public class Drive extends OpMode {
     public Gamepad previousGamepad1, currentGamepad1;
     public Timer rumbling, rumbling2, block;
     public boolean direction;
+    public Telemetry telemetry;
+    public AprilTagDetection id20;
     //public IMU imu;
 
     @Override
     public void init() {
-        robot = new Hardware(hardwareMap);
+        robot = new Hardware(hardwareMap, telemetry);
 
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
@@ -64,8 +70,14 @@ public class Drive extends OpMode {
 
     @Override
     public void loop() {
+        robot.aprilTagWebcam.update();
+        id20 = robot.aprilTagWebcam.getTagBySpecificID(20);
+        robot.aprilTagWebcam.displayDetectionTelemetry(id20);
+
         follower.update();
         drive(gamepad1);
+
+        telemetry.addData("voltage", "%.1f volts", new Func<Double>() { @Override public Double value() { return robot.getBatteryVoltage(hardwareMap); } });
 
         previousGamepad1.copy(currentGamepad1);
         currentGamepad1.copy(gamepad1);
