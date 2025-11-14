@@ -19,8 +19,8 @@ public class Hardware {
     public List<DcMotorEx> motors, shooters;
 
     public Hardware(HardwareMap hardwareMap, Telemetry telemetry){
-        aprilTagWebcam = new AprilTagWebcam();
-        aprilTagWebcam.init(hardwareMap, telemetry);
+        //aprilTagWebcam = new AprilTagWebcam();
+        //aprilTagWebcam.init(hardwareMap, telemetry);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
