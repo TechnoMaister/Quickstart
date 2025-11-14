@@ -18,7 +18,7 @@ public class Hardware {
     public Servo blocker;
     public List<DcMotorEx> motors, shooters;
 
-    public Hardware(HardwareMap hardwareMap, Telemetry telemetry){
+    public Hardware(HardwareMap hardwareMap){
         //aprilTagWebcam = new AprilTagWebcam();
         //aprilTagWebcam.init(hardwareMap, telemetry);
 

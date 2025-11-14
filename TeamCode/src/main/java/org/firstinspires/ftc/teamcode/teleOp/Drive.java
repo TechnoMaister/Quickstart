@@ -8,6 +8,8 @@ import static org.firstinspires.ftc.teamcode.util.RobotConstants.colectorPowerN;
 import static org.firstinspires.ftc.teamcode.util.RobotConstants.rumblingT;
 import static org.firstinspires.ftc.teamcode.util.RobotConstants.shooterPower;
 
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.util.Timer;
@@ -18,7 +20,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Func;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.util.Hardware;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -27,16 +28,18 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 public class Drive extends OpMode {
     public Hardware robot;
     public Follower follower;
-    public static Pose startingPose;
+    public Pose startingPose;
     public Gamepad previousGamepad1, currentGamepad1;
     public Timer rumbling, rumbling2, block;
     public boolean direction;
-    public Telemetry telemetry;
+    public TelemetryManager telemetryM;
     public AprilTagDetection id20;
 
     @Override
     public void init() {
-        robot = new Hardware(hardwareMap, telemetry);
+        robot = new Hardware(hardwareMap);
+
+        telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
@@ -57,19 +60,19 @@ public class Drive extends OpMode {
 
     @Override
     public void loop() {
+        telemetryM.update(telemetry);
         //robot.aprilTagWebcam.update();
         //id20 = robot.aprilTagWebcam.getTagBySpecificID(20);
         //robot.aprilTagWebcam.displayDetectionTelemetry(id20);
 
-        follower.update();
         drive(gamepad1);
 
-        telemetry.addData("voltage", "%.1f volts", new Func<Double>() { @Override public Double value() { return robot.getBatteryVoltage(hardwareMap); } });
+        telemetryM.addData("voltage" + "%.1f volts", new Func<Double>() { @Override public Double value() { return robot.getBatteryVoltage(hardwareMap); } });
 
         previousGamepad1.copy(currentGamepad1);
         currentGamepad1.copy(gamepad1);
 
-        if (currentGamepad1.left_trigger > 0 && previousGamepad1.left_trigger == 0) direction = !direction;
+        if (currentGamepad1.right_trigger > 0 && previousGamepad1.right_trigger == 0) direction = !direction;
 
         if (direction) {
             robot.colector.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -117,5 +120,6 @@ public class Drive extends OpMode {
                 -gamepad.right_stick_x,
                 true
         );
+        follower.update();
     }
 }
