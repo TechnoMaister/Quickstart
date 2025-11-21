@@ -5,13 +5,14 @@ import com.bylazar.configurables.annotations.Configurable;
 @Configurable
 public class RobotConstants {
     public static double
-
-    shooterPower = 0.9,
     colectorPowerN = 1,
     colectorPowerD = 1,
-    blockerBlockedPos = 0,
-    blockerOpenPos = 0.4,
+    colectorPowerB = -.4,
+    blockerBlockedPos = .45,
+    blockerOpenPos = .6,
     rumblingT = 250,
-    blockT = 350;
-
+    blockT = 350,
+    vMax = 6.5,
+    k = .15,
+    tolerance = 35;
 }
