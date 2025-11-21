@@ -80,11 +80,11 @@ public class Drive extends OpMode {
         if (currentGamepad1.cross && !previousGamepad1.cross) team = !team;
 
         if(team) {
-            id = robot.aprilTagWebcam.getTagBySpecificID(21);
-            telemetry.addLine("BLUE");
+            id = robot.aprilTagWebcam.getTagBySpecificID(24);
+            telemetry.addLine("RED");
         } else {
             id = robot.aprilTagWebcam.getTagBySpecificID(20);
-            telemetry.addLine("RED");
+            telemetry.addLine("BLUE");
         }
 
         if (direction) {

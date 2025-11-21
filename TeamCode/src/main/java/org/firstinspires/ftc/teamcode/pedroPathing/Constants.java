@@ -29,14 +29,14 @@ public class Constants {
             .forwardTicksToInches(.001989436789)
             .strafeTicksToInches(.0008989436789)
             .turnTicksToInches(.001989436789)
-            .leftPodY(3.44488189)
-            .rightPodY(-3.44488189)
-            .strafePodX(6.2007874)
+            .leftPodY(3.69)
+            .rightPodY(-3.69)
+            .strafePodX(6.27)
             .leftEncoder_HardwareMapName("leftRear")
             .rightEncoder_HardwareMapName("rightFront")
             .strafeEncoder_HardwareMapName("leftFront")
             .leftEncoderDirection(Encoder.REVERSE)
-            .rightEncoderDirection(Encoder.REVERSE)
+            .rightEncoderDirection(Encoder.FORWARD)
             .strafeEncoderDirection(Encoder.REVERSE);
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);

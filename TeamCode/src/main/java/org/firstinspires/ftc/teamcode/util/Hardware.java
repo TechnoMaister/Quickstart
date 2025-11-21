@@ -16,7 +16,7 @@ public class Hardware {
     public DcMotorEx leftFront, leftRear, rightFront, rightRear, colector, leftShoot, rightShoot;
     public Servo leftBlocker, rightBlocker;
     public List<Servo> blockers;
-    public List<DcMotorEx> motors, shooters;
+    public List<DcMotorEx> motors, chassis, shooters;
 
     public Hardware(HardwareMap hardwareMap, Telemetry telemetry){
         aprilTagWebcam = new AprilTagWebcam();
@@ -42,6 +42,7 @@ public class Hardware {
         rightBlocker.setDirection(Servo.Direction.REVERSE);
 
         motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear, colector, leftShoot, rightShoot);
+        chassis = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
         shooters = Arrays.asList(leftShoot, rightShoot);
         blockers = Arrays.asList(leftBlocker, rightBlocker);
 

@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -27,6 +28,11 @@ public class Direction extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
         follower.update();
+
+        for(DcMotorEx motor : robot.chassis) {
+            motor.setDirection(DcMotorSimple.Direction.FORWARD);
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
     }
 
     @Override
@@ -38,8 +44,11 @@ public class Direction extends OpMode {
     public void loop() {
         drive(gamepad1);
 
+        for(DcMotorEx motor : robot.chassis)
+            motor.setDirection(DcMotorSimple.Direction.FORWARD);
+
         if(gamepad1.right_bumper)
-            for(DcMotorEx motor : robot.motors)
+            for(DcMotorEx motor : robot.chassis)
                 motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         telemetryM.debug("LEFT REAR(left): " + robot.leftRear.getCurrentPosition());
